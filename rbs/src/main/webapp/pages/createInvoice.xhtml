@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/homeTemplate.xhtml">
+	<ui:define name="content">
+		<h:form id="createInvoiceForm">
+			<p:growl id="messages"></p:growl>
+
+			<p:panel header="Create Invoice" id="invoicePanel">
+				<h:panelGrid columns="3">
+					<h:outputText value="Hospital Name: " />
+					<p:selectOneMenu value="#{createInvoiceBean.selectedHospital}"
+						styleClass="" id="hospitals">
+						<f:selectItems value="#{createInvoiceBean.hospitalNames}"></f:selectItems>
+					</p:selectOneMenu>
+					<p:commandButton id="showDialogButton" type="button" value="Add"
+						onclick="dlg.show()" />
+
+					<h:outputText value="Patient Name: " />
+					<p:inputText id="patientName"
+						value="#{createInvoiceBean.selectedPatient}" styleClass="">
+					</p:inputText>
+					<ui:remove>
+						<p:commandButton id="showDialogBtn" type="button" value="Add"
+							onclick="hdlg.show()" />
+					</ui:remove>
+					<p:messages for=""></p:messages>
+					<h:outputText value="Date: " />
+					<p:calendar value="#{createInvoiceBean.date}" required="true"
+						pattern="MMM dd, yyyy">
+					</p:calendar>
+					<h:outputText></h:outputText>
+					<h:outputText value="No of entries:"></h:outputText>
+					<p:inputText required="true" value="#{createInvoiceBean.noOfEntry}"></p:inputText>
+					<h:outputText></h:outputText>
+					<p:commandButton value="Create"
+						action="#{createInvoiceBean.createInvoices}"
+						update=":createInvoiceForm:dataTable"></p:commandButton>
+					<p:commandButton value="Reset" update="invoicePanel"
+						process="@this">
+						<p:resetInput target="invoicePanel"></p:resetInput>
+					</p:commandButton>
+				</h:panelGrid>
+			</p:panel>
+			<p:panel id="invoPanel">
+
+				<p:dataTable id="dataTable" var="invoice" editable="true"
+					editMode="cell" value="#{createInvoiceBean.invoiceEntries}"
+					widgetVar="icdCodeTable"
+					emptyMessage="No records found with given criteria"
+					paginator="true" rows="20" paginatorAlwaysVisible="false"
+					paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,15,20" lazy="true">
+					<p:ajax event="cellEdit" listener="#{createInvoiceBean.onCellEdit}"
+						update=":createInvoiceForm:messages :createInvoiceForm:dataTable" />
+					<p:column headerText="Date" footerText="Date">
+						<p:cellEditor>
+							<f:facet name="input">
+								<p:calendar value="#{invoice.date}" pattern="MMM dd, yyyy">
+								</p:calendar>
+							</f:facet>
+							<f:facet name="output">
+								<h:outputText value="#{invoice.date}">
+									<f:convertDateTime pattern="MMM dd, yyyy" timeZone="IST"></f:convertDateTime>
+								</h:outputText>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="Description" footerText="Description"
+						id="cpt_desc">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{invoice.description}"></h:outputText>
+							</f:facet>
+							<f:facet name="input">
+								<p:autoComplete id="acPojo" value="#{invoice}"
+									completeMethod="#{createInvoiceBean.completePlayer}"
+									var="player" itemLabel="#{player.description}"
+									itemValue="#{player}" converter="player" forceSelection="true">
+									<p:ajax event="itemSelect"
+										listener="#{createInvoiceBean.handleSelect}"
+										update=":createInvoiceForm:messages :createInvoiceForm:dataTable" />
+								</p:autoComplete>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="Category" footerText="Category">
+						<h:outputText value="#{invoice.category}"></h:outputText>
+					</p:column>
+					<p:column headerText="Code" footerText="Code" id="cpt_cde">
+						<h:outputText value="#{invoice.cpt}"></h:outputText>
+					</p:column>
+
+					<p:column headerText="Fee ($)" footerText="Fee" id="cpt_fee">
+						<h:outputText value="#{invoice.fee}"></h:outputText>
+					</p:column>
+					<p:column headerText="Units" footerText="Units">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{invoice.units}"></h:outputText>
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{invoice.units}">
+								</p:inputText>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="Total ($)" footerText="Total ($)">
+						<h:outputText value="#{invoice.total}"></h:outputText>
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		<h:form id="addForm">
+			<p:growl id="growl" showDetail="true" life="3000" />
+			<p:dialog id="dialog" header="Add Hospital" widgetVar="dlg"
+				resizable="false">
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:outputLabel for="hospName" value="Hospital Name:" />
+					<p:inputText id="hospName"
+						value="#{createInvoiceBean.addHospital.hospitalName}" />
+					<h:outputLabel for="hospLoc" value="Hospital Location:" />
+					<p:inputText id="hospLoc"
+						value="#{createInvoiceBean.addHospital.hospitalLoc}" />
+					<f:facet name="footer">
+						<p:commandButton id="loginButton" value="Save"
+							action="#{createInvoiceBean.saveHospital}"
+							update="growl :createInvoiceForm:hospitals"
+							oncomplete="dlg.hide()" />
+					</f:facet>
+				</h:panelGrid>
+			</p:dialog>
+			<p:dialog id="dialogPatient" header="Add Patient" widgetVar="hdlg"
+				resizable="false">
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:outputLabel for="patientName" value="Patient Name:" />
+					<p:inputText id="patientName"
+						value="#{createInvoiceBean.addPatient}" />
+					<f:facet name="footer">
+						<p:commandButton id="addPatientBtn" value="Save"
+							update="growl :createInvoiceForm:hospitals"
+							oncomplete="hdlg.hide()" />
+					</f:facet>
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

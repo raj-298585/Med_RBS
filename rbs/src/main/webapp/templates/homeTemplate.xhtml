@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+	<title>Medical Code and Report</title>
+	<h:outputStylesheet library="css" name="align.css"></h:outputStylesheet>
+	<h:outputStylesheet library="css" name="myStyles.css"></h:outputStylesheet>
+	<h:outputStylesheet name="dataTable.css" library="css"></h:outputStylesheet>
+</h:head>
+<h:body>
+	<div id="topbar"></div>
+	<div id="container">
+		<div id="logo">
+			<ui:insert name="header">
+				<ui:include src="/pages/logo.xhtml" />
+			</ui:insert>
+		</div>
+		<br /> <br />
+		<div id="menubar2">
+			<ui:insert name="header">
+				<ui:include src="/pages/header.xhtml" />
+			</ui:insert>
+		</div>
+		<div id="content">
+			<div id="myHomeContent">
+				<ui:insert name="content">
+				</ui:insert>
+			</div>
+		</div>
+	</div>
+</h:body>
+</html>

@@ -1,0 +1,46 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	margin: 0;
+	padding: 0;
+	padding-top: 0em;
+	/* background: url("../images/bg1.jpg"); */
+	padding-top: 0em;
+	min-width: 1024px;
+	background-color: rgb(217, 222, 226);
+	background-image: -moz-linear-gradient(center top, rgb(235, 238, 242),
+		rgb(217, 222, 226) );
+	background-color: rgb(217, 222, 226);
+}
+
+#topbar {
+	min-height: 55px;
+	background: url("./images/logo1.png") no-repeat;
+	left: 0;
+	opacity: 1;
+	/* position: fixed; */
+}
+
+#container {
+	max-width: 1000px;
+	min-height:848px;
+	margin-left: 10%;
+	background-color: white;
+}
+
+#logo { 
+	min-height: 40px;
+	min-width: 100%;	
+}
+
+.topMenubar {
+	padding: 0;
+	padding-left: 200px;
+	text-align: right;
+	background: transparent;
+	border: none;
+}
+
+.toolbar{
+	
+}

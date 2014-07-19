@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Medical Code and Report</title>
+	<h:outputStylesheet library="css" name="login.css"></h:outputStylesheet>
+</h:head>
+
+<body>
+	<h:form>
+		<p:growl id="growl" showDetail="true" />
+		<div id="login" class="login">
+			<h:panelGrid styleClass="loginTable">
+				<h:panelGrid columns="2" styleClass="loginTable"
+					columnClasses="loginLabelCol,loginTextCol,loginLastCol">
+					<p:outputLabel value="User Name:"></p:outputLabel>
+					<p:inputText id="username"
+						value="#{loginBean.loginentity.associateId}"
+						converterMessage="User ID should be 6 digit number"
+						required="true" requiredMessage="User ID shouldn't be empty"
+						styleClass="userNameClass"
+						title="Please enter your 6 digit User ID here"></p:inputText>
+					<ui:remove>
+						<p:watermark for="username" value="UserName"></p:watermark>
+					</ui:remove>
+
+					<p:outputLabel value="Password:"></p:outputLabel>
+					<p:inputText id="password"
+						value="#{loginBean.loginentity.password}" required="true"
+						type="password" requiredMessage="Password shouldn't be empty"
+						title="Enter your secured password here"
+						styleClass="passwordClass"></p:inputText>
+					<ui:remove>
+						<p:watermark for="password" value="Password"></p:watermark>
+					</ui:remove>
+
+				</h:panelGrid>
+				<h:panelGrid columns="2" columnClasses="emptyCell,forgotPassword">
+					<p:selectBooleanCheckbox label="" styleClass="rememberMe"
+						itemLabel="Remember me"></p:selectBooleanCheckbox>
+					
+					<h:outputLink value="https://identity.cognizant.com/itim/self/">Forgot your password?</h:outputLink>
+				</h:panelGrid>
+				<h:panelGrid columns="1" styleClass="actionTable">
+					<p:commandButton id="submit" type="submit" value="Sign In"
+						icon="ui-icon-locked" iconPos="right" styleClass="submitClass"
+						action="#{loginBean.authenticate}" ajax="false"></p:commandButton>
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+	</h:form>
+</body>
+</html>

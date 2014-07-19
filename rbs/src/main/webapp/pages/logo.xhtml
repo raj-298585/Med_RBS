@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+
+	<h:form>
+		<p:growl id="messages" />
+		<p:toolbar styleClass="toolbar">
+			<p:toolbarGroup>
+				<p:menubar styleClass="topMenubar">
+					<p:menuitem value="CPT Code" url="/faces/pages/home.xhtml"
+						icon="ui-icon-gear" rendered="#{loginBean.accessLevel==null}" />
+
+					<p:submenu label="Invoice" icon="ui-icon-pencil">
+						<p:menuitem value="Create Invoice"
+							url="/faces/pages/createInvoice.xhtml" icon="ui-icon-document" />
+						<p:menuitem value="Generate Invoice"
+							url="/faces/pages/uptanddltactivity.xhtml" icon="ui-icon-refresh" />
+					</p:submenu>
+
+					<p:menuitem value="Add Users" icon="ui-icon-search"
+						url="/faces/pages/manageUsers.xhtml" />
+					<p:menuitem value="Role Access" icon="ui-icon-search"
+						url="/faces/pages/searchnreport.xhtml" />
+				</p:menubar>
+			</p:toolbarGroup>
+		</p:toolbar>
+
+	</h:form>
+</ui:composition>
+</html>

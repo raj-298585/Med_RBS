@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/homeTemplate.xhtml">
+	<ui:define name="content">
+		<h:form id="addForm">
+			<p:growl id="messages" showDetail="true"></p:growl>
+			<h:panelGrid columns="2" columnClasses="topAlign,topAlign">
+				<p:panel header="Add CPT" toggleable="true" id="addPanel">
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Category : "></p:outputLabel>
+						<p:selectOneMenu value="#{icdCodePageBean.icdCode.category}">
+							<f:selectItems value="#{icdCodePageBean.categoryNames}"></f:selectItems>
+						</p:selectOneMenu>
+						<p:outputLabel value="Description : "></p:outputLabel>
+						<p:inputText value="#{icdCodePageBean.icdCode.description}"></p:inputText>
+						<p:outputLabel value="CPT : "></p:outputLabel>
+						<p:inputText value="#{icdCodePageBean.icdCode.cpt}"></p:inputText>
+						<p:outputLabel value="Fee (in $) : "></p:outputLabel>
+						<p:inputText value="#{icdCodePageBean.icdCode.fee}"></p:inputText>
+						<p:commandButton value="Save" action="#{icdCodePageBean.save}"
+							update=":codeForm :addForm:messages" icon="ui-icon-plusthick"></p:commandButton>
+						<p:commandButton value="Reset" update="addPanel" process="@this">
+							<p:resetInput target="addPanel"></p:resetInput>
+						</p:commandButton>
+					</h:panelGrid>
+				</p:panel>
+				<p:fileUpload mode="advanced" dragDropSupport="true" auto="false"
+					update="messagesF" sizeLimit="100000" fileLimit="1"
+					allowTypes="/(\.|\/)(xlsx|xls)$/" />
+				<p:growl id="messagesF" showDetail="true" />
+			</h:panelGrid>
+		</h:form>
+		<br />
+		<h:form id="codeForm">
+			<p:growl id="messages" showDetail="true" />
+			<p:dataTable id="dataTable" var="icdCode" editable="true"
+				editMode="cell" value="#{icdCodePageBean.codeModel}"
+				widgetVar="icdCodeTable"
+				filteredValue="#{icdCodePageBean.filteredicdCodes}"
+				emptyMessage="No records found with given criteria" paginator="true"
+				rows="20" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,15,20" lazy="true">
+				<p:ajax event="cellEdit" listener="#{icdCodePageBean.onCellEdit}"
+					update=":codeForm:messages :codeForm:dataTable" />
+				<p:column headerText="Category" sortBy="#{icdCode.category}"
+					footerText="Category">
+					<h:outputText value="#{icdCode.category}"></h:outputText>
+				</p:column>
+				<p:column headerText="Code" filterBy="#{icdCode.cpt}"
+					filterMatchMode="contains" sortBy="#{icdCode.cpt}"
+					footerText="Code" id="cpt_cde">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{icdCode.cpt}"></h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{icdCode.cpt}"></p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column headerText="Description" filterBy="#{icdCode.description}"
+					filterMatchMode="contains" sortBy="#{icdCode.description}"
+					footerText="Description" id="cpt_desc">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{icdCode.description}"></h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{icdCode.description}"></p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column headerText="Fee ($)" footerText="Fee" id="cpt_fee">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{icdCode.fee}"></h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{icdCode.fee}"></p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+			</p:dataTable>
+			<br />
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/homeTemplate.xhtml">
+	<ui:define name="content">
+		<h:form id="manageUser">
+			<p:growl id="messages" showDetail="true"></p:growl>
+			<p:panel header="Add or Edit Users" id="userPanel">
+				<h:panelGrid columns="6">
+					<h:outputText value="First Name : " />
+					<p:inputText required="true" id="firstName"
+						requiredMessage="First Name Shoudn't be empty"
+						value="#{manageUsers.userDetails.firstName}"></p:inputText>
+					<p:message for="firstName"></p:message>
+
+					<h:outputText value="Last Name : " />
+					<p:inputText required="true" id="lastName"
+						requiredMessage="Last Name Shoudn't be empty"
+						value="#{manageUsers.userDetails.lastName}"></p:inputText>
+					<p:message for="lastName"></p:message>
+					<h:outputText value="Email ID : " />
+					<p:inputText required="true" id="emailID"
+						requiredMessage="Email ID is required."
+						value="#{manageUsers.userDetails.emailID}"></p:inputText>
+					<p:message for="emailID"></p:message>
+
+					<h:outputText value="Contact Number : " />
+					<p:inputText required="true" id="contactNumber"
+						requiredMessage="Contact Number is required."
+						value="#{manageUsers.userDetails.contactNumber}"></p:inputText>
+					<p:message for="contactNumber"></p:message>
+
+					<h:outputText value="Company : " />
+					<p:inputText required="true" id="company"
+						requiredMessage="Company is required."
+						value="#{manageUsers.userDetails.company}"></p:inputText>
+					<p:message for="company"></p:message>
+					<h:outputText value="Role :  " />
+					<p:inputText required="true" id="role"
+						requiredMessage="Role field is required."
+						value="#{manageUsers.userDetails.role}"></p:inputText>
+					<p:message for="role"></p:message>
+					<ui:remove>
+						<h:outputText value="User Name : " />
+						<p:inputText required="true" id="userName"
+							value="#{manageUsers.userDetails.userName}"></p:inputText>
+						<h:outputText value="Password :  " />
+						<p:password required="true" id="password"
+							value="#{manageUsers.userDetails.password}"></p:password>
+
+						<h:outputText value="Date Of Creation :  " />
+						<p:calendar required="true" id="dateOfCreation"
+							value="#{manageUsers.userDetails.dateOfCreation}">
+						</p:calendar>
+					</ui:remove>
+					<h:outputText value="" />
+					<h:outputText value="" />
+					<h:outputText value="" />
+				</h:panelGrid>
+				<p:commandButton value="Save" action="#{manageUsers.save}"
+					icon="ui-icon-plusthick"
+					update="userPanel messages :userForm:dataTable"></p:commandButton>
+				<p:commandButton value="Reset" update="userPanel" process="@this">
+					<p:resetInput target="userPanel"></p:resetInput>
+				</p:commandButton>
+
+			</p:panel>
+
+		</h:form>
+		<br></br>
+
+		<h:form id="userForm">
+			<p:growl id="messages" showDetail="true" />
+			<p:dataTable id="dataTable" var="user" editable="true"
+				editMode="cell" value="#{manageUsers.userDetalisList}"
+				widgetVar="userTable"
+				emptyMessage="No records found with given criteria" paginator="true"
+				rows="10" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,15,20" lazy="true">
+				<p:ajax event="cellEdit" update="" />
+				<p:column headerText="First Name" sortBy="#{user.firstName}"
+					footerText="First Name">
+					<h:outputText value="#{user.firstName}"></h:outputText>
+				</p:column>
+				<p:column headerText="Last Name" sortBy="#{user.lastName}"
+					footerText="Last Name" id="lastNameColumn">
+					<h:outputText value="#{user.lastName}"></h:outputText>
+				</p:column>
+				<p:column headerText="Email ID" filterBy=""
+					filterMatchMode="contains" sortBy="" footerText="Email ID"
+					id="emailIdColumn">
+					<h:outputText value="#{user.emailID}"></h:outputText>
+				</p:column>
+				<p:column headerText="Contact Number" footerText="Contact Number"
+					id="contactNumberColumn">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{user.contactNumber}"></h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{user.contactNumber}"></p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column headerText="Date Of Creation"
+					footerText="Date Of Creation" id="dateOfCreationColumn">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{user.dateOfCreation}"></h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{user.dateOfCreation}"></p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column headerText="Role" footerText="Role" id="roleColumn">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{user.role}"></h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{user.role}"></p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+			</p:dataTable>
+			<br />
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>
